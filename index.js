@@ -10,10 +10,19 @@ program
     .arguments('<module>')
     .option('-o, --out <outputFileName>', 'the output path')
     .option('-g, --globalVariable [globalVariable]', 'the name of the global variable to expose')
+    .option('-e, --external <moduleName>=<globalVariable>,...', 'the maps of dependencies to their global variables ')
     .parse(process.argv);
 
 if (program.args.length !== 1) {
     program.help();
+}
+
+var externals
+if (program.external) {
+    externals = program.external.match(/[^,=]*=[^,]*/g)
+    if (externals.length === 0) {
+        program.help()
+    }
 }
 
 var moduleArgument = program.args[0];
@@ -37,6 +46,7 @@ globalify({
         module: moduleName,
         version: version,
         globalVariable: program.globalVariable,
+        externals: externals,
         installDirectory: packageJson.installDirectory
     },
     function(error){
@@ -44,4 +54,5 @@ globalify({
             console.log(error);
         }
     }
-).pipe(outStream);
+)
+// .pipe(outStream);

@@ -5,10 +5,14 @@ var browserify = require('browserify'),
     path = require('path'),
     stream = require('stream'),
     defaults = {
+        externals: [],
         installDirectory: './globalify_modules',
         version: 'x.x.x'
     },
     rootPath = __dirname;
+
+var webpack = require('webpack');
+var failPlugin = require('webpack-fail-plugin')
 
 module.exports = function globalify(settings, callback){
 
@@ -20,19 +24,52 @@ module.exports = function globalify(settings, callback){
 
     var moduleName = settings.module,
         version = settings.version,
-        outputFileName = moduleName + '-' + version.replace(/\./g,'-') + '.js',
-        outputStream = stream.PassThrough(),
+        outputFileName = moduleName.replace('/', '-') + '-' + version.replace(/\./g,'-') + '.js';
+
+    var outputStream = stream.PassThrough(),
         bundleStream;
+    var globalShim = {};
+    for (var i = 0; i < settings.externals.length; i++) {
+        var externalKeyAndValue = settings.externals[i].split('=');
+        globalShim[externalKeyAndValue[0]] = externalKeyAndValue[1];
+    }
 
     function globalifyModule(moduleName, callback){
+        webpack({
+            externals: globalShim,
+            devtool: 'inline-source-map',
+            entry: path.resolve(rootPath, settings.installDirectory),
+            output: {
+                path: process.cwd(),
+                filename: outputFileName,
+                library: (settings.globalVariable || moduleName),
+                libraryTarget: 'var'
+            },
+            module: {
+                preLoaders: [
+                    {
+                        test: /.\.js$/,
+                        loader: 'source-map-loader'
+                    }
+                ]
+            },
+            plugins: [
+                failPlugin
+            ]
+        }).run((err, stats) => {
+            console.log('in run()')
+            console.log(err, stats)
+        })
 
-        var stream = resumer().queue('window["' + (settings.globalVariable || moduleName) + '"] = require("' + moduleName + '");').end();
-        var b = browserify({
-            entries: [stream],
-            basedir: path.resolve(rootPath, settings.installDirectory)
-        });
+        // var stream = resumer().queue('window["' + (settings.globalVariable || moduleName) + '"] = require("' + moduleName + '");').end();
+        // var b = browserify({
+        //     entries: [stream],
+        //     basedir: path.resolve(rootPath, settings.installDirectory),
+        //     // transform: ["browserify-shim"],
+        //     // "browserify-shim": globalShim
+        // });
 
-        bundleStream = b.bundle(callback).pipe(outputStream);
+        // bundleStream = b.bundle(callback).pipe(outputStream);
     }
 
     function npmInstall(module, version, callback){
