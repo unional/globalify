@@ -40,12 +40,13 @@ else {
 
 version = moduleNodes[1] || 'x.x.x';
 
-var outStream = fs.createWriteStream(program.out || moduleName.replace('/', '-') + '.js');
+// var outStream = fs.createWriteStream(program.out || moduleName.replace('/', '-') + '.js');
 
 globalify({
         module: moduleName,
         version: version,
         globalVariable: program.globalVariable,
+        outputFileName: program.out,
         externals: externals,
         installDirectory: packageJson.installDirectory
     },

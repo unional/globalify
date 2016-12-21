@@ -1,18 +1,19 @@
-var browserify = require('browserify'),
-    fs = require('fs'),
+// var browserify = require('browserify'),
+var fs = require('fs');
     npm = require('npm'),
-    resumer = require('resumer'),
+    // resumer = require('resumer'),
     path = require('path'),
-    stream = require('stream'),
+    // stream = require('stream'),
     defaults = {
         externals: [],
         installDirectory: './globalify_modules',
         version: 'x.x.x'
     },
     rootPath = __dirname;
-
+var pascalCase = require('pascal-case');
 var webpack = require('webpack');
-var failPlugin = require('webpack-fail-plugin')
+var failPlugin = require('webpack-fail-plugin');
+var sourceMapLoader = require('source-map-loader');
 
 module.exports = function globalify(settings, callback){
 
@@ -24,10 +25,10 @@ module.exports = function globalify(settings, callback){
 
     var moduleName = settings.module,
         version = settings.version,
-        outputFileName = moduleName.replace('/', '-') + '-' + version.replace(/\./g,'-') + '.js';
-
-    var outputStream = stream.PassThrough(),
-        bundleStream;
+        outputFileName = settings.outputFileName || moduleName.replace('/', '-') + '-' + version.replace(/\./g,'-') + '.js';
+    var globalVariable = settings.globalVariable || pascalCase(moduleName.indexOf('@') === 0 ? moduleName.slice(1): moduleName)
+    // var outputStream = stream.PassThrough(),
+    //     bundleStream;
     var globalShim = {};
     for (var i = 0; i < settings.externals.length; i++) {
         var externalKeyAndValue = settings.externals[i].split('=');
@@ -38,11 +39,11 @@ module.exports = function globalify(settings, callback){
         webpack({
             externals: globalShim,
             devtool: 'inline-source-map',
-            entry: path.resolve(rootPath, settings.installDirectory),
+            entry: path.resolve(rootPath, settings.installDirectory, 'node_modules', moduleName),
             output: {
                 path: process.cwd(),
                 filename: outputFileName,
-                library: (settings.globalVariable || moduleName),
+                library: globalVariable,
                 libraryTarget: 'var'
             },
             module: {
@@ -93,16 +94,14 @@ module.exports = function globalify(settings, callback){
             fs.mkdirSync(installDirectory);
         }
 
-        if(!fs.existsSync(packagePath)){
+        // if(!fs.existsSync(packagePath)){
             fs.writeFileSync(packagePath, JSON.stringify({
                 name:'globalify-modules'
-                // ,
-                // main:'index.js'
             }));
-        }
+        // }
 
         // if(!fs.existsSync(indexJsPath)){
-        //     fs.writeFileSync(indexJsPath, 'var x = require("' + moduleName + '"); module.exports = x;')
+            fs.writeFileSync(indexJsPath, 'var x = require("' + moduleName + '"); module.exports = x;')
         // }
 
         npm.load({
@@ -126,5 +125,5 @@ module.exports = function globalify(settings, callback){
         globalifyModule(moduleName, callback);
     });
 
-    return outputStream;
+    // return outputStream;
 }
