@@ -58,7 +58,12 @@ module.exports = function globalify(settings, callback){
             ]
         }).run((err, stats) => {
             console.log('in run()')
-            console.log(err, stats)
+            if (err || stats.hasErrors()) {
+                console.log(stats.toJson())
+            }
+            else {
+                console.log('no error')
+            }
         })
 
         // var stream = resumer().queue('window["' + (settings.globalVariable || moduleName) + '"] = require("' + moduleName + '");').end();
@@ -81,7 +86,8 @@ module.exports = function globalify(settings, callback){
 
     function installModule(moduleName, version, callback){
         var installDirectory = path.resolve(rootPath, settings.installDirectory),
-            packagePath = path.join(installDirectory, 'package.json');
+            packagePath = path.join(installDirectory, 'package.json'),
+            indexJsPath = path.join(installDirectory, 'index.js');
 
         if(!fs.existsSync(installDirectory)){
             fs.mkdirSync(installDirectory);
@@ -90,8 +96,14 @@ module.exports = function globalify(settings, callback){
         if(!fs.existsSync(packagePath)){
             fs.writeFileSync(packagePath, JSON.stringify({
                 name:'globalify-modules'
+                // ,
+                // main:'index.js'
             }));
         }
+
+        // if(!fs.existsSync(indexJsPath)){
+        //     fs.writeFileSync(indexJsPath, 'var x = require("' + moduleName + '"); module.exports = x;')
+        // }
 
         npm.load({
                 prefix: installDirectory
