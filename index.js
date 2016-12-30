@@ -38,9 +38,7 @@ else {
     moduleName = moduleNodes[0];
 }
 
-version = moduleNodes[1] || 'x.x.x';
-
-// var outStream = fs.createWriteStream(program.out || moduleName.replace('/', '-') + '.js');
+version = moduleNodes[1];
 
 globalify({
         module: moduleName,
@@ -56,4 +54,3 @@ globalify({
         }
     }
 )
-// .pipe(outStream);
