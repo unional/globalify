@@ -7,8 +7,8 @@ var fs = require('fs');
     },
     rootPath = __dirname;
 var pascalCase = require('pascal-case');
-var webpack = require('webpack');
 var sourceMapLoader = require('source-map-loader');
+var webpack = require('webpack');
 
 module.exports = function globalify(settings, callback){
 
@@ -18,10 +18,11 @@ module.exports = function globalify(settings, callback){
         settings[key] = settings[key] || defaults[key];
     }
 
-    var moduleName = settings.module,
-        version = settings.version,
-        outputFileName = settings.outputFileName || moduleName.replace('/', '-') + (version ? '-' + version.replace(/\./g,'-') : '') + '.js';
-    var globalVariable = settings.globalVariable || pascalCase(moduleName.indexOf('@') === 0 ? moduleName.slice(1): moduleName)
+    var moduleName = settings.module;
+    var cleanedModuleName = moduleName.indexOf('@') === 0 ? moduleName.slice(1) : moduleName;
+    var version = settings.version;
+    var outputFileName = settings.outputFileName || cleanedModuleName.replace('/', '-') + (version ? '-' + version.replace(/\./g,'-') : '') + '.js';
+    var globalVariable = settings.globalVariable || pascalCase(cleanedModuleName);
     var globalShim = {};
     for (var i = 0; i < settings.externals.length; i++) {
         var externalKeyAndValue = settings.externals[i].split('=');
