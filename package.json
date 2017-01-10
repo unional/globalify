@@ -14,8 +14,7 @@
     "npm": "^4.0.5",
     "pascal-case": "^2.0.0",
     "source-map-loader": "^0.1.5",
-    "webpack": "^2.2.0-rc.3",
-    "webpack-fail-plugin": "^1.0.5"
+    "webpack": "^2.2.0-rc.3"
   },
   "author": "",
   "license": "MIT",
