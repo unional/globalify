@@ -22,7 +22,11 @@ module.exports = function globalify(settings, callback){
     var cleanedModuleName = moduleName.indexOf('@') === 0 ? moduleName.slice(1) : moduleName;
     var version = settings.version;
     var outputFileName = settings.outputFileName || cleanedModuleName.replace('/', '-') + (version ? '-' + version.replace(/\./g,'-') : '') + '.js';
-    var globalVariable = settings.globalVariable || pascalCase(cleanedModuleName);
+
+    var globalIdentifier = typeof settings.globalVariable === 'function' ?
+        settings.globalVariable(moduleName, version) :
+        settings.globalVariable || pascalCase(cleanedModuleName);
+
     var globalShim = {};
     for (var i = 0; i < settings.externals.length; i++) {
         var externalKeyAndValue = settings.externals[i].split('=');
@@ -39,7 +43,7 @@ module.exports = function globalify(settings, callback){
             output: {
                 path: process.cwd(),
                 filename: outputFileName,
-                library: globalVariable,
+                library: globalIdentifier,
                 libraryTarget: 'var'
             },
             module: {

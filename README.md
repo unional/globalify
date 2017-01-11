@@ -25,8 +25,8 @@ var globalify = require('globalify');
 globalify({
         module: 'gedi',
         version: '0.10.0', // OPTIONAL, Will default to x.x.x
-        globalVariable: 'gedi', // OPTIONAL, Will default to the module name.
-        instalDirectory: 'someDir' // OPTIONAL, Will default to globalify_modules
+        globalVariable: 'gedi' or function(moduleName, version){ ... }, // OPTIONAL, Will default to the module name pascalCased.
+        installDirectory: 'someDir' // OPTIONAL, Will default to globalify_modules
     },
     function(error){
         // Something went a bit shit.
