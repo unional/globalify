@@ -65,7 +65,7 @@ module.exports = function globalify(settings, callback){
     }
 
     function npmInstall(module, version, callback){
-        var nameAndVersion = module + (version ? '@"' + version + '"' : '');
+        var nameAndVersion = module + (version ? '@' + version : '');
         npm.commands.install([nameAndVersion], function (error, data) {
             callback(error);
         });
