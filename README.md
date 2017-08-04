@@ -1,4 +1,4 @@
-# Globalify
+# @unional/globalify
 
 ## Wat
 
@@ -8,12 +8,17 @@ Globalify will install from npm then browserify a module.
 
 For easy usage in testing sites like jsperf.com, or jsbin etc etc..
 
+## installation
+
+```sh
+npm -i @unional/globalify -g
+```
+
 ## Usage
 
 ### cmdline
 
 ```sh
-npm -i globalify -g
 globalify gedi -o gedi-0.10.0.js
 ```
 
