@@ -37,18 +37,27 @@ module.exports = function globalify(settings, callback){
     function globalifyModule(moduleName, callback){
         webpack({
             externals: globalShim,
-            devtool: 'inline-source-map',
+            devtool: 'source-map',
             context,
             entry,
             output: {
                 path: process.cwd(),
                 filename: outputFileName,
                 library: globalIdentifier,
-                libraryTarget: 'var'
+                libraryTarget: 'var',
+                devtoolModuleFilenameTemplate: (info) => {
+                    if (info.identifier.lastIndexOf('.ts') === info.identifier.length - 3) {
+                        return `webpack:///${moduleName}/${info.resource.slice(9)}`
+                    }
+                    else {
+                        return `webpack:///${info.resourcePath}`
+                    }
+                }
             },
             module: {
-                loaders: [
+                rules: [
                     {
+                        enforce: 'pre',
                         test: /.\.js$/,
                         loader: 'source-map-loader'
                     }

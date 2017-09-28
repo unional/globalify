@@ -10,22 +10,22 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "commander": "^2.9.0",
-    "npm": "^4.0.5",
-    "pascal-case": "^2.0.0",
-    "source-map-loader": "^0.1.5",
-    "webpack": "^2.2.0-rc.3"
+    "commander": "^2.11.0",
+    "npm": "^5.4.2",
+    "pascal-case": "^2.0.1",
+    "source-map-loader": "^0.2.1",
+    "webpack": "^3.6.0"
   },
   "author": "",
   "license": "MIT",
   "installDirectory": "./globalify_modules",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KoryNunn/globalify.git"
+    "url": "git+https://github.com/unional/globalify.git"
   },
   "keywords": [],
   "bugs": {
-    "url": "https://github.com/KoryNunn/globalify/issues"
+    "url": "https://github.com/unional/globalify/issues"
   },
-  "homepage": "https://github.com/KoryNunn/globalify#readme"
+  "homepage": "https://github.com/unional/globalify#readme"
 }
