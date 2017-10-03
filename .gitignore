@@ -41,5 +41,5 @@ node_modules
 typings
 
 # project folders
-dist
+dist-es5
 globalify_modules

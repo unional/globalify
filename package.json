@@ -1,31 +1,81 @@
 {
-  "name": "@unional/globalify",
-  "version": "1.2.3",
-  "description": "## Wat",
-  "main": "globalify.js",
-  "bin": {
-    "globalify": "./index.js"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "dependencies": {
-    "commander": "^2.11.0",
-    "npm": "^5.4.2",
-    "pascal-case": "^2.0.1",
-    "source-map-loader": "^0.2.1",
-    "webpack": "^3.6.0"
-  },
-  "author": "",
-  "license": "MIT",
-  "installDirectory": "./globalify_modules",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/unional/globalify.git"
-  },
-  "keywords": [],
-  "bugs": {
-    "url": "https://github.com/unional/globalify/issues"
-  },
-  "homepage": "https://github.com/unional/globalify#readme"
+    "name": "@unional/globalify",
+    "version": "1.2.3",
+    "description": "Globalify npm packages",
+    "main": "dist-es5/index.js",
+    "typings": "dist-es5/index.d.ts",
+    "bin": {
+        "globalify": "dist-es5/index.js"
+    },
+    "files": [
+        "dist-es5"
+    ],
+    "scripts": {
+        "build": "npm run clean && npm run build-es5",
+        "build-es5": "tsc -p tsconfig.es5.json",
+        "clean": "rimraf dist-es5",
+        "dc": "npm run dependency-check",
+        "dependency-check": "dependency-check . --unused --no-dev && dependency-check . --missing --no-dev",
+        "lint": "tslint -p tsconfig.json --type-check \"src/**/*.ts\"",
+        "prepare": "npm run build",
+        "postpublish": "git push",
+        "preversion": "git pull && npm run verify",
+        "verify": "npm run lint && npm run coverage && npm run dependency-check",
+        "coverage": "nyc npm test",
+        "coveralls": "nyc report --reporter=text-lcov | coveralls",
+        "test": "npm run clean && tsc && ava",
+        "watch": "npm run clean && node scripts/watch.js",
+        "debug": "node scripts/debug.js"
+    },
+    "author": {
+        "name": "Homa Wong",
+        "email": "homawong@gmail.com",
+        "url": "https://github.com/unional"
+    },
+    "license": "MIT",
+    "installDirectory": "../globalify_modules",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/unional/globalify.git"
+    },
+    "bugs": {
+        "url": "https://github.com/unional/globalify/issues"
+    },
+    "homepage": "https://github.com/unional/globalify#readme",
+    "ava": {
+        "files": [
+            "dist-es5/**/*.spec.js"
+        ],
+        "source": [
+            "scripts/*.js",
+            "dist-es5/**/*.js",
+            "*.json"
+        ]
+    },
+    "nyc": {
+        "exclude": [
+            "scripts",
+            "**/*.spec.*",
+            "**/fixtures/**/*",
+            "**/test/**/*"
+        ]
+    },
+    "dependencies": {
+        "commander": "^2.11.0",
+        "npm": "^5.4.2",
+        "pascal-case": "^2.0.1",
+        "source-map-loader": "^0.2.1",
+        "webpack": "^3.6.0"
+    },
+    "devDependencies": {
+        "@types/node": "^8.0.31",
+        "@types/npm": "^2.0.29",
+        "ava": "^0.22.0",
+        "dependency-check": "^2.9.1",
+        "nyc": "^11.2.1",
+        "rimraf": "^2.6.2",
+        "tslint": "^5.7.0",
+        "tslint-config-unional": "^0.8.0",
+        "typescript": "^2.5.3"
+    }
 }

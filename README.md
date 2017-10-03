@@ -38,3 +38,10 @@ globalify({
     }
 ).pipe(myAwesomeWriteStream);
 ```
+
+## Attribution
+
+This package is originally created by Kory Nunn.
+<https://github.com/KoryNunn/globalify>
+
+I have converted it to use [`webpack`](https://github.com/webpack/webpack) and then rewrite it in TypeScript.
