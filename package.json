@@ -5,18 +5,18 @@
     "main": "dist-es5/index.js",
     "typings": "dist-es5/index.d.ts",
     "bin": {
-        "globalify": "dist-es5/index.js"
+        "globalify": "dist-es5/bin.js"
     },
     "files": [
         "dist-es5"
     ],
     "scripts": {
-        "build": "npm run clean && npm run build-es5",
+        "build": "npm run build-es5",
         "build-es5": "tsc -p tsconfig.es5.json",
         "clean": "rimraf dist-es5",
         "dc": "npm run dependency-check",
         "dependency-check": "dependency-check . --unused --no-dev && dependency-check . --missing --no-dev",
-        "lint": "tslint -p tsconfig.json --type-check \"src/**/*.ts\"",
+        "lint": "tslint -p tsconfig.json 'src/**/*.ts'",
         "prepare": "npm run build",
         "postpublish": "git push",
         "preversion": "git pull && npm run verify",
@@ -62,10 +62,10 @@
     },
     "dependencies": {
         "commander": "^2.11.0",
-        "npm": "^5.4.2",
+        "npm": "^5.5.1",
         "pascal-case": "^2.0.1",
-        "source-map-loader": "^0.2.1",
-        "webpack": "^3.6.0"
+        "source-map-loader": "^0.2.3",
+        "webpack": "^3.8.1"
     },
     "devDependencies": {
         "@types/node": "^8.0.31",
@@ -74,8 +74,8 @@
         "dependency-check": "^2.9.1",
         "nyc": "^11.2.1",
         "rimraf": "^2.6.2",
-        "tslint": "^5.7.0",
+        "tslint": "^5.8.0",
         "tslint-config-unional": "^0.8.0",
-        "typescript": "^2.5.3"
+        "typescript": "^2.6.1"
     }
 }

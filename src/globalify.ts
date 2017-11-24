@@ -5,6 +5,7 @@ import { createBundle } from './bundle'
 import { rootPath } from './constants'
 import { defaultSettings } from './settings'
 import { installPackage } from './installPackage'
+
 export function globalify(settings, callback) {
 
   settings = settings || {};

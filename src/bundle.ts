@@ -14,8 +14,8 @@ export function createBundle({
   context,
   entry,
   outputFileName,
-  globalIdentifier,
-  packageName
+  globalIdentifier
+  // packageName
  }) {
   // const packageMain = getPackageMain(entry)
   // let root: string
@@ -27,19 +27,22 @@ export function createBundle({
     output: {
       path: process.cwd(),
       filename: outputFileName,
-      library: globalIdentifier,
-      libraryTarget: 'var',
-      devtoolModuleFilenameTemplate: (info) => {
-        if (info.resourcePath.startsWith('webpack/bootstrap'))
-          return `webpack:///${info.resourcePath}`
+      library: globalIdentifier
+      // devtoolFallbackModuleFilenameTemplate: (info) => {
+      //   console.log(info)
+      // },
+      // devtoolModuleFilenameTemplate: (info) => {
+      // //   if (info.resourcePath.startsWith('webpack/bootstrap'))
+      // //     return `webpack:///${info.resourcePath}`
 
-        // if (!root)
-        //   root = info.resourcePath.slice(0, info.resourcePath.lastIndexOf('/') + 1)
+      //   console.log(info)
+      // //   // if (!root)
+      // //   //   root = info.resourcePath.slice(0, info.resourcePath.lastIndexOf('/') + 1)
 
-        // waiting for https://github.com/webpack/webpack/issues/5754
-        // return `webpack:///${packageName}/${info.resourcePath.slice(root.length)}`
-        return `webpack:///${packageName}/${info.resourcePath}`
-      }
+      // //   // waiting for https://github.com/webpack/webpack/issues/5754
+      // //   // return `webpack:///${packageName}/${info.resourcePath.slice(root.length)}`
+      // //   return `webpack:///${packageName}/${info.resourcePath}`
+      // }
     },
     module: {
       rules: [
